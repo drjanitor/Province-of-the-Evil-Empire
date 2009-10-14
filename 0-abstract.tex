@@ -1,0 +1,13 @@
+\begin{abstract}
+	Access limitations are characterizations of a database schema that classify the attributes of a relation as either input or output.
+	Such limitations occur, for instance, in data exchange and integration, data warehousing, and Web information systems, when heterogeneous sources, possibly accessible through web forms, are queried.
+	Since, in such contexts, the full answer to a query cannot generally be computed in the same way as in a traditional database, one is typically interested in the \emph{maximally contained answer}, i.e., the set of all answer tuples that can be obtained in spite of the access limitations.
+	Retrieving such answers requires, in general, a recursive evaluation process
+%	  that may involve relations that are present in the schema, but that are not mentioned in the query.
+	that involves all relations of the schema that are \emph{relevant} to the query, possibly including relations not mentioned in the query.
+
+	In this paper, we develop a technique for determining whether a relation is relevant to a conjunctive query over a schema with access limitations. This solves a long-standing open issue.
+	Furthermore, we complete the study of the problem by extending this technique to the context of unions of conjunctive queries with 
+% TODO: vogliamo dire "safe"?
+negation and by showing that relevance is undecidable for Datalog queries.
+\end{abstract}

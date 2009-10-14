@@ -1,0 +1,80 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%% USEFUL
+
+\newcommand{\titleconference}[3]{\title{\hspace*{\fill}%
+ \begin{minipage}[t]{\textwidth} \centering #1 \end{minipage}%
+ \hspace*{\fill}\makebox[0cm][r]{\raisebox{#2}[0cm][0cm]{\small\textmd{#3}}}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% ENVIRONMENTS and THEOREMS
+
+\newcounter{cefalo}
+\newcounter{cefalocont}
+\newenvironment{enumcont}
+  {\begin{list}{(\roman{cefalo})}{\usecounter{cefalo}
+     \labelwidth3em
+     \itemsep0cm
+     \setcounter{cefalo}{\value{cefalocont}}}}
+  {\setcounter{cefalocont}{\value{cefalo}}\end{list}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition} 
+\newtheorem{lemma}[theorem]{Lemma} 
+
+\newtheorem{definitionAux}[theorem]{Definition} 
+\newenvironment{definition}{\begin{definitionAux} \rm
+}{\end{definitionAux}}
+
+\newtheorem{claimAux}{Claim} 
+\newenvironment{claim}{\begin{claimAux}\rm}{\end{claimAux}}
+
+\newtheorem{exampleAux}{Example}[section]
+\newenvironment{example}{\begin{exampleAux}\upshape}
+  {\markfull\end{exampleAux}}
+\newenvironment{exampleCont}[1]{\trivlist
+  \item[\hskip \labelsep{\textbf{Example~#1 (cont.)}}]}{\endtrivlist}
+
+\newtheorem{examplesAux}[theorem]{Examples} 
+\newenvironment{examples}{\begin{examplesAux}\rm}{\end{examplesAux}}
+
+\newtheorem{constructionAux}[theorem]{Construction} 
+\newenvironment{construction}{\begin{constructionAux}\rm}
+                             {\end{constructionAux}}
+
+% \newenvironment{proof}{\noindent\textsl{Proof.\ }}{\qed}
+\newenvironment{proofsk}{\noindent\textsl{Proof (sketch).\ }}{\qed}
+
+\newcommand{\Proof}{\textsl{Proof.\ }}
+\newcommand{\Proofsk}{\textsl{Proof (sketch).\ }}
+
+\def\qed{\hfill{\qedboxempty}      % qed with empty box
+  \ifdim\lastskip<\medskipamount \removelastskip\penalty55\medskip\fi}
+
+\def\qedboxempty{\vbox{\hrule\hbox{\vrule\kern3pt
+                 \vbox{\kern3pt\kern3pt}\kern3pt\vrule}\hrule}}
+
+\def\qedfull{\hfill{\qedboxfull}   % qed with full box
+  \ifdim\lastskip<\medskipamount \removelastskip\penalty55\medskip\fi}
+
+\def\qedboxfull{\vrule height 4pt width 4pt depth 0pt}
+
+\newcommand{\markfull}{\qedfull}
+\newcommand{\markempty}{\qed}
+
+% \newcommand{\If}{\lq\lq$\Leftarrow$\rq\rq\ \ }           % 1st direction of iff
+% \newcommand{\OnlyIf}{\lq\lq$\Rightarrow$\rq\rq\ \ }      % 2nd direction of iff
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% BOXES
+
+\newcommand{\fpbox}[3]{\framebox[#1]{\parbox{#2}{#3}}}
+\newcommand{\boxtext}[1]{\fpbox{\textwidth}{0.9\textwidth}{#1}}
+\newcommand{\boxcolumn}[1]{\fpbox{\columnwidth}{0.9\columnwidth}{#1}}
+\newcommand{\boxformula}[1]{%
+  \vspace{\abovedisplayskip}
+  \boxtext{\vspace{-\abovedisplayskip} #1 \vspace{-\abovedisplayskip}}
+  \vspace{\abovedisplayskip}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERS
+
+\newcommand{{\incolumn}}[1]{\begin{tabular}[c]{c} #1 \end{tabular}}
+\newcommand{{\incolumnmath}}[1]{\begin{array}[c]{c} #1 \end{array}}
+%% note: "x \atop y" may be more convenient

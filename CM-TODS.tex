@@ -1,0 +1,88 @@
+\documentclass[acmtods]{acmtrans2m}
+%&t&{\tt #}&
+%&v&\verb|#|&
+
+% \acmVolume{2}
+% \acmNumber{3}
+% \acmYear{01}
+% \acmMonth{09}
+
+\newcommand{\BibTeX}{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% \markboth{Leslie Lamport et al.}{Preparing Articles for the ACM 
+% Transactions}
+
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xspace}
+% \usepackage[section]{algorithm}
+\usepackage{algpseudocode}
+% \usepackage{eulervm}
+
+\title{Determining relevant relations for answering queries under access limitations}
+ % \author{ANDREA CALI'\\University of Oxford \and
+ % DAVIDE MARTINENGHI\\Politecnico di Milano}
+
+\markboth{Anonymous authors}{Determining relevant relations for answering queries under access limitations}
+
+\input{0-abstract}
+
+\category{H.2.4}{Information Systems}{Systems}[Query Processing]
+
+\category{H.2.5}{Information Systems}{Heterogeneous Databases}
+
+\terms{Algorithms, Theory}
+% 
+\keywords{Access limitations, relevance, queries}
+
+\begin{document}
+
+%\setcounter{page}{111}
+
+\begin{bottomstuff}
+% Author's address: A. Cal\`\i, Computing Laboratory, University of Oxford.
+% 	Wolfson Building, Parks Road -- Oxford OX1\,QED, United Kingdom.\newline
+% D. Martinenghi, Dipartimento di Elettronica e Informazione, Politecnico di Milano.
+% 	Piazza Leonardo 32 -- 20133 Milano, Italy
+\end{bottomstuff}
+% \maketitle
+
+%\pagestyle{plain} % remove for final version
+
+\input{environments}
+\input{macros-general}
+\input{macros-local}
+
+% \input{1-intro}
+% \input{2-preliminaries}
+\input{3-cq}
+% \input{4-extensions}
+% \input{5-related}
+% \input{6-discussion}
+
+\bibliographystyle{acmtrans}
+% \bibliography{long-string,CM-TODS2008}
+
+\begin{received} 
+%Received Month Year; revised Month Year; accepted Month Year 
+\end{received} 
+
+\end{document}
+
+% TODO: parlare del fatto che c'è un solo binding pattern per relazione (come nei paper precedenti)
+% 
+% TODO: commenti del SIGMOD - prevenire opportunamente queste critiche
+% W2. The examples, while helpful, were pretty trivial (e.g. Example 4.1) compared to the algorithms -- never referencing more than one non-referenced relation -- and didn't illustrate any of the more subtle problems the algorithms must address, e.g., when more than one extra relation is needed to make the connection, or when two or more paths are possible.
+% C2. Quite early on, I could see where you were headed -- toward the d-graph (dependency graph) -- but it took a long time to get there. Once you did, I was surprised that there was no discussion of results from graph theory that either could or could not be used to solve the relevance problem for relations. I fully expected that reachability algorithms could be pretty much applied directly, and I thought that that would be a very nice result. But instead you invented your own algorithm.
+% C6. Why can't some arguments be both inputs and outputs? Is that the definition of "free"? Your definition of "free" wasn't clear to me, because you said it was the absence of an "i". That would make outputs "free", wouldn't it? 
+% Q1. Why don't the many results from graph theory on reachability of nodes pertain to this problem, as you have posed it? Take your dependency graph, with the same black source nodes representing the given constants only, and add sink nodes that specify the arguments that are asked for in the query. It seems to me that the problem of determining relevant relations becomes one of finding all reachable paths from source nodes to sink nodes, and that that might be already solved in the extensive literature on graph theory, e.g. maximizing the flow in that directed network. Did you consider this possibility? Why no mention of that literature in your otherwise pretty thorough assessment of related work?
+% Q2. On what basis (i.e. based upon what survey of real workloads) do you claim that "connection queries are of little significance w.r.t. queries used in practice", when probably 98% of the SQL queries written have very explicit join predicates specified linking all referenced relations (though Cartesian products are certainly allowed)?
+% Q3. Why must a predicate having a constant be specified on an input argument (Section 2.1), i.e. why are complete scans of a relation forbidden as "not feasible"? We do it all the time in SQL queries, so why is it not feasible here? What about range predicates, IN-lists, LIKE predicates with wildcards, etc.? These too are very common in "fill in the blanks" web applications, your motivating application.
+% Q4. Since recursive queries are permitted, what ensures finiteness of the answer?
+% (i) The response from the authors regarding motivation of the problem remains unsatisfactory. Explicit query formulation will remain the likely approach in the foreseeable future for web service calls. Moreover, any determination of inclusion of additional subgoals will have many other considerations. Thus, I continue to find the motivation for the problem as weak.
+
+% TODO: riusciamo a rendere la motivazione ancora piu' compelling?
+
+% TODO: gli esempi devono essere piu' appealing. Probabilmente basterebbe un running example con una query interessante che non sia una connection query e la cui ottimizzazione sia non banale (taglia alcuni archi, ma non tutti e magari una source inaccessibile)

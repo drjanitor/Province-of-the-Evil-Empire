@@ -1,0 +1,104 @@
+\section{Introduction}
+\label{sec:intro}
+
+%Access limitations are a natural characterization of data access that occur in several contexts.
+%In several contexts, the access to data is naturally characterized by limitations.
+
+Several query answering contexts are naturally characterized by limitations on the ways in which data can be accessed.
+
+%The access to data is often characterized by limitations. This occurs in several contexts.
+
+%A first, notable context in which access limitation occur is that of 
+Access limitations occur, for instance, in the context of Web data.
+%Web data is certainly one such context.
+A large amount of data on the Web is accessible only via forms.
+Every data source accessible through a form can be seen as a relational table where certain attributes are selected by filling in the corresponding fields: this helps restricting the search space at the data source and avoids disclosing with a single request all the information it contains.
+For example, a form of an online shop would typically forbid requests that leave all fields of the form empty, thus prohibiting the access to all the underlying data in one shot.
+
+Another context of interest is that of legacy systems, where data may be scattered over several files and wrapped and masked as relational tables. Such tables, typically, have analogous limitations reflecting the original structure of the data and thus cannot be queried freely.
+% since there may be access limitations due to way the data are organized in the ﬁles. 
+%where data stored in various ways are wrapped as relational tables with analogous limitations reflecting the original structure of the data.
+
+Similar limitations exist in the context of Web services. Indeed, restrictions in the way in which data can be accessed by invoking Web services arise from the distinction between input parameters and output parameters.
+%, which does not occur in the attributes of a relational table.
+
+In all the above-mentioned contexts, many \emph{useful} queries may be conceived that do not comply with the existing access limitations. For such queries, traditional query answering techniques would fail by attempting to access the sources in the wrong way.
+Indeed, it is in general impossible to extract the complete answer to such queries.
+However, suitable access strategies exist that are able to retrieve the \emph{maximally contained answer}, i.e., the set of all answer tuples that can be disclosed in spite of the access limitations
+
+% with a suitable access strategy that possibly makes also use of known sources that are not directly mentioned in the query, one can determine a query plan that is able to retrieve all the disclosable answers to the query.
+
+In particular, as shown, e.g., in~\cite{RaSU95,LiCh00}, finding the maximally contained answer may require the access to known sources that are not directly mentioned in the query, and amounts, in general, to evaluating a \emph{recursive} query plan.
+%
+Recursion comes from the fact that output values from one source can be used to access mandatory fields of another source, as shown in the following example.
+
+\begin{example}\label{exa:limitations}
+  Consider the following independent Web data sources, wrapped as relational tables:\\
+\begin{longitem}
+	\item $r_1(\mathit{Topic}, \mathit{Conference}, \mathit{Year}, \mathit{Venue})$,
+  which stores information about which conferences, with associated year and
+  venue, cover a given topic, and requires the first attribute to be filled in;
+	\item $r_2(\mathit{Conference},\mathit{Topic})$, which stores which topics are
+  covered by a given conference, and requires the first attribute to be given
+  as input;
+	\item $r_3(\mathit{Conference},\mathit{KeynoteSpeaker})$, which stores the
+	  keynote speakers of conferences, and also requires the first attribute to be given as input.
+\end{longitem}
+%
+  The query
+  \[
+  q(K) ~\impl~ r_2(C, it), ~r_3(C, K)
+  \]
+  asks for the keynote speakers of conferences in Information Technology.
+
+  Since there are no selections on the input attribute $\mathit{Conference}$ of $r_2$ and $r_3$, there is no way of answering $q$ in the ``traditional'' way.
+The best we can do to find answers to $q$ is accessing first
+  $r_1$ with the constant `$it$' present in the query.  In this way, we will
+  retrieve some constants for the attribute $\mathit{Conference}$, with which
+  we can then access $r_2$ and $r_3$; the tuples (if any) returned from $r_2$
+  will have some constant for the attribute $\mathit{Topic}$, that we can use
+  to access $r_1$ again, and so on; we continue the process until no more
+  tuples can be extracted.  Finally, at the end of this process,
+  calculating the join and the selection specified by $q$ on the extracted
+  tuples will return the maximally contained answer to $q$ under the given access
+  limitations.  Notice that this requires accessing the ``off-query'' relation
+  $r_1$; also, we need to consider that both attributes named $\mathit{Topic}$
+  in $r_1$ and $r_2$ represent values of the same kind (and similarly for
+  $\mathit{Conference}$) -- this will be formally represented by the notion of
+  \emph{abstract domain}.
+%
+  % \markfull
+\end{example}
+
+As shown above, providing the maximally contained answer to a query may require not only to access sources that do not appear in the query, but also to query them recursively, thus with a potentially large number of accesses.
+In addition, accesses to sources over the Web or to legacy systems may be slow, thus making query answering extremely time-consuming.  In this scenario, it is therefore important to restrict the accesses to only those sources that are actually used to compute the maximally contained answer, i.e., the \emph{relevant} sources.
+Intuitively, we say that a source is relevant to a query if, for at least one instance of the sources in the schema, its data are necessary to produce the maximally contained answer.
+
+\vskip 0.1cm
+\emph{Contributions of the paper.}
+Query answering under access limitations is a problem of great significance, as testified to by a large body of recent research in the
+field~\cite{LiCh00,LiCh01b,LiCh01,Li03,DBLP:journals/jcss/MillsteinHF03,NaLu04,LuNa04a,YaKC06,Deutsch:2007lr,CaMa:ICDE2008,BCDM:VLDB2008};
+% TODO: vedere se è opportuno rimuovere ICDE
+yet, several important issues are still open.
+% Building on the problem of obtaining the maximally contained answer to a query with respect to a given set of data sources with access limitations~\cite{MiLF00,DBLP:journals/jcss/MillsteinHF03,LiCh00,LiCh01,LiCh01b}, 
+In this paper we address the problem of determining the relevant sources for a query under access limitations.
+% TODO: dire anche "in this journal"?
+We develop algorithms to solve this problem for \emph{conjunctive queries} (i.e., the select-project-join queries of SQL), thus solving a long-standing open issue~\cite{LiCh01b},
+and then we extend the algorithms to solve it for \emph{unions of conjunctive queries with negation}.
+Finally, we also show that relevance for Datalog queries is undecidable, thus solving another open issue and contradicting an implicit conjecture in~\cite{LiCh01b}.
+% TODO: forse conjecture non è la parola giusta. Loro dicono 
+%
+% For the datalog program of a conjunctive query it is still not clear how to decide which relations are relevant 
+% to the program. The "kernel" concept in Section might give us a hint on how to trim useless source relations
+%
+The relevance problem has been solved so far only for the class of the so-called \emph{connection queries}, which require all attributes of the same type to be in a join, and, therefore, do not cover conjunctive queries.
+%
+
+% The algorithms to determine relevant sources allow us to produce query plans that avoid all accesses that are unnecessary to answer the query;
+
+%The paper is organized as follows.
+\vskip 0.1cm
+\emph{Paper organization.}
+After giving the necessary preliminaries in Section~\ref{sec:preliminaries}, we show how to determine relevant sources in Section~\ref{sec:planning}, based on the construction of a graph representing how sources can contribute values to each other, depending on the conjunctive query; we proceed by pruning the graph so as to eliminate irrelevant sources.
+In Section~\ref{sec:extensions} we extend our results to more expressive query languages.
+Finally, we discuss related work in Section~\ref{sec:related}, and we conclude in Section~\ref{sec:discussion}.

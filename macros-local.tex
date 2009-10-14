@@ -1,0 +1,209 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TODS
+
+\newcommand{\constants}{\mbox{\myfn{const}}}
+\newcommand{\inputmode}{\ensuremath{i}}
+\newcommand{\outputmode}{\ensuremath{o}}
+\newcommand{\accesstuple}[2]{\mbox{\sf acc}_{#2}(#1)}
+% funzioni
+\newcommand{\outArcs}{\myfn{outArcs}}
+
+% predicati booleani
+\newcommand{\myfn}[1]{\textsf{#1}}
+\newcommand{\nodes}{\mbox{\myfn{nodes}}}
+\newcommand{\inputNodes}{\mbox{\myfn{inputNodes}}}
+\newcommand{\isStrong}{\mbox{\myfn{isStrong}}}
+\newcommand{\isDeleted}{\mbox{\myfn{isDeleted}}}
+\newcommand{\isBlack}{\mbox{\myfn{isBlack}}}
+\newcommand{\isCyclic}{\mbox{\myfn{isCyclic}}}
+\newcommand{\joined}{\mbox{\myfn{joined}}}
+\newcommand{\arc}{\mbox{$^{\curvearrowright}$}}
+\newcommand{\dpath}{\mbox{$^{\curvearrowright^{+{}}}$}}
+\newcommand{\isFreeReachable}{\mbox{\myfn{isFreeReachable}}}
+\newcommand{\isAnswerable}{\mbox{\myfn{isAnswerable}}}
+\newcommand{\isAccessible}{\mbox{\myfn{isAccessible}}}
+\newcommand{\sources}{\mbox{\myfn{sources}}}
+\newcommand{\source}{\mbox{\myfn{source}}}
+\newcommand{\blackSources}{\mbox{\myfn{blackSources}}}
+\newcommand{\isFixpoint}{\mbox{\myfn{isFixpoint}}}
+\newcommand{\isNodeOK}{\mbox{\myfn{isNodeOK}}}
+\def\true{\mbox{\myfn{true}}}
+\newcommand{\candStr}{\myfn{cand}}
+\newcommand{\arcs}{\myfn{arcs}}
+\newcommand{\circularCand}{\myfn{circ}}
+
+\def\codenot{\mbox{\textbf{not\ }}}
+\def\codeif{\mbox{\textbf{if\ }}}
+\def\codethen{\mbox{\textbf{then\ }}}
+\def\codeforeach{\mbox{\textbf{for each\ }}}
+\def\codedo{\mbox{\textbf{do\ }}}
+\def\codewhile{\mbox{\textbf{while\ }}}
+\def\codetrue{\mbox{\textbf{true\ }}}
+\def\codefalse{\mbox{\textbf{false\ }}}
+\def\codeand{\mbox{\textbf{and\ }}}
+\def\codereturn{\mbox{\textbf{return\ }}}
+\def\codebreak{\mbox{\textbf{break\ }}}
+\def\codebool{\mbox{\textbf{bool\ }}}
+\def\codeelse{\mbox{\textbf{else\ }}}
+\def\GSD{\mbox{$G^{(\S,\D)}$}}
+\def\CQnot{CQ$^\lnot$}
+\def\UCQnot{UCQ$^\lnot$}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CAiSE
+
+\newcounter{banana}
+
+\newcommand{\impl}{\la}
+\newcommand{\DB}{\mathit{DB}}
+
+\newcommand{\ifdirection}{``$\Leftarrow$'' {}}
+\newcommand{\onlyifdirection}{``$\Rightarrow$'' {}}
+
+
+\newcommand{\ext}[2]{#1^{#2}}
+
+\newcommand{\rel}[1]{\textsf{#1}}
+\newcommand{\Rel}[0]{\mathit{Rel}}
+\newcommand{\attr}[1]{\mathit{#1}}
+%\newcommand{\battr}[1]{\mathit{\underline{#1}}}
+\newcommand{\battr}[1]{\mathit{#1}^{b}}
+\newcommand{\const}[1]{\textit{#1}}
+\newcommand{\ev}[1]{\mathbf{#1}}
+
+\newcommand{\ins}[1]{\mathbf{#1}}
+\newcommand{\insA}{\ins{A}}
+\newcommand{\insB}{\ins{B}}
+\newcommand{\insC}{\ins{C}}
+\newcommand{\insD}{\ins{D}}
+\newcommand{\insX}{\ins{X}}
+\newcommand{\insY}{\ins{Y}}
+\newcommand{\insK}{\ins{K}}
+
+\newcommand{\head}{\mathsf{head}}
+\newcommand{\body}{\mathsf{conj}}
+\newcommand{\arity}{\mathsf{arity}}
+\newcommand{\conj}{\mathsf{conj}}
+
+
+\newcommand{\key}{\mathit{key}}
+\newcommand{\can}{\mathit{can}}
+\newcommand{\ret}{\mathit{ret}}
+\newcommand{\HD}{\mathit{HD}}
+\newcommand{\HT}{\mathit{HT}}
+\newcommand{\VT}{\mathit{VT}}
+
+%\newcommand{\bodyrule}[1]{\mathit{body}(#1)}
+%\newcommand{\headrule}[1]{\mathit{head}(#1)}
+%% Nuova versione
+\newcommand{\bodyr}[1]{\mathit{body}(#1)}
+\newcommand{\headr}[1]{\mathit{head}(#1)}
+
+\newcommand{\mgu}[2]{\mathit{mgu}(#1,#2)}
+\newcommand{\expand}[1]{\mathit{exp}_\G(#1)}
+\newcommand{\expm}[1]{\mathit{exp}_\G^-(#1)}
+\newcommand{\unfold}[1]{\mathit{unf}_{\M}(#1)}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% EISIC
+\newcommand{\wrt}[0]{with respect to\ }
+
+\newcommand{\retr}[1]{\hat{#1}}
+\newcommand{\opt}[0]{^\textit{opt}}
+\newcommand{\edges}[0]{\mathrm{Edges}}
+
+\newenvironment{algoritmo}{\begin{list}{}{\setlength{\leftmargin}{\parindent}
+%% \setlength{\parsep}{0pt}\setlength{\topsep}{0cm}\setlength{\partopsep}{0pt}
+%% \setlength{\itemsep}{0pt}
+    }\item\begin{program}}%
+  {\end{program}\end{list}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ER-02
+
+%\newcommand{\conj}{\varphi}
+\newcommand{\limp}{\ra}
+
+%\newcommand{\gav}[2][\S]{\varrho_{#1}(#2)}
+%\newcommand{\lav}[2][\G]{\varrho_{#1}(#2)}
+%% nuova versione
+\newcommand{\gav}[2][\S]{\rho_{#1}(#2)}
+\newcommand{\lav}[2][\G]{\rho_{#1}(#2)}
+
+%\renewcommand{\dom}[1][]{\Delta^{#1}}
+\newcommand{\Map}[2]{#1\,\subseteq\,#2}
+%\newcommand{\expand}[1]{\mathit{expand}\_{#1}}
+\newcommand{\expandsource}[1]{\mathsf{expand}\_{#1}}
+\newcommand{\image}[1]{\mathsf{image}\_{#1}}
+%\newcommand{\ins}[1]{\mathbf{#1}}
+
+\newcommand{\Mmin}{M_{\mathit{min}}}
+
+\newcommand{\cites}{\mathsf{cites}}
+\newcommand{\sameTopic}{\mathsf{sameTopic}}
+%\newcommand{\source}{\mathsf{source}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% VLDB-02
+
+%\newcommand{\cert}[1]{#1^{\I,\D}}
+%\newcommand{\cert}[1]{\mathit{cert}(#1,\I,\D)}
+\newcommand{\cert}[2][\I,\D]{\mathit{cert}(#2,#1)}
+% \newcommand{\src}{\mathit{src}}
+% \newcommand{\srcm}{\mathit{src}^-}
+\newcommand{\poss}[2][\I,\D]{\mathit{cert}(#2,#1)}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NUOVE
+
+\newcommand{\chase}[2]{\mathit{chase}_{#1}(#2)}
+\newcommand{\level}{\mathit{level}}
+\newcommand{\minh}{\mathit{min}_H}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Infomix
+\newcommand{\datalog}{Datalog{}}
+%\newcommand{\arity}[1]{\mathit{arity}(#1)} %% Gia' definito
+%\newcommand{\vett}[1]{\mathbf{\vec{#1}}}
+%% Nuova versione
+\newcommand{\vett}[1]{\vec{#1}}
+\newcommand{\sem}{\mathit{sem}}
+
+%\newcommand{\poss}{\mathit{poss}}
+%\newcommand{\cert}{\mathit{cert}}
+\newcommand{\coh}{\mathit{coh}}
+%\newcommand{\ext}{\mathit{ext}}
+\newcommand{\dfn}{\mathit{def}}
+\newcommand{\ans}{\mathit{ans}}
+\newcommand{\as}{\mathit{as}}
+
+\newcommand{\Pablo}{\textsf{Pablo}}
+\newcommand{\Rome}{\textsf{Rome}}
+\newcommand{\Italy}{\textsf{Italy}}
+\newcommand{\John}{\textsf{John}}
+\newcommand{\Spain}{\textsf{Spain}}
+\newcommand{\USA}{\textsf{USA}}
+
+%%%%%%%%%%%%%%%%%
+% CHANGED: definizioni - domenico
+
+\newcommand{\GqR}{\G_q^\R}
+\newcommand{\MqR}{\M_q^\R}
+\newcommand{\SqR}{\S_q^\R}
+\newcommand{\arcS}{\arc^s}
+\newcommand{\arcW}{\arc^w}
+\newcommand{\src}[2]{(#1, #2)}
+\newcommand{\Let}{\State \textbf{let }}
+
+\newcommand{\setq}{\gets}
+\newcommand{\var}[1]{\textsf{#1}}
+\newcommand{\myproc}[1]{\textbf{#1}}
+\algrenewcommand\textproc{\myproc}
+
+\newcommand{\all}[1]{\forall \, #1 \, . \,}
+\newcommand{\some}[1]{\exists \, #1 \, . \,}

@@ -1,0 +1,127 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%% General
+
+\newcommand{\myi}{(\textit{i})\xspace}
+\newcommand{\myii}{(\textit{ii})\xspace}
+\newcommand{\myiii}{(\textit{iii})\xspace}
+\newcommand{\myiv}{(\textit{iv})\xspace}
+\newcommand{\myv}{(\textit{v})\xspace}
+\newcommand{\myvi}{(\textit{vi})\xspace}
+\newcommand{\myvii}{(\textit{vii})\xspace}
+\newcommand{\myviii}{(\textit{viii})\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% General Math
+
+\newcommand{\A}{\mathcal{A}} \newcommand{\B}{\mathcal{B}}
+\newcommand{\C}{\mathcal{C}} \newcommand{\D}{\mathcal{D}}
+\newcommand{\E}{\mathcal{E}} \newcommand{\F}{\mathcal{F}}
+\newcommand{\G}{\mathcal{G}} \renewcommand{\H}{\mathcal{H}}
+\newcommand{\I}{\mathcal{I}} \newcommand{\J}{\mathcal{J}}
+\newcommand{\K}{\mathcal{K}} \renewcommand{\L}{\mathcal{L}}
+\newcommand{\M}{\mathcal{M}} \newcommand{\N}{\mathcal{N}}
+\renewcommand{\O}{\mathcal{O}} \renewcommand{\P}{\mathcal{P}}
+\newcommand{\Q}{\mathcal{Q}} \newcommand{\R}{\mathcal{R}}
+\renewcommand{\S}{\mathcal{S}} \newcommand{\T}{\mathcal{T}}
+\newcommand{\U}{\mathcal{U}} \newcommand{\V}{\mathcal{V}}
+\newcommand{\W}{\mathcal{W}} \newcommand{\X}{\mathcal{X}}
+\newcommand{\Y}{\mathcal{Y}} \newcommand{\Z}{\mathcal{Z}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Abbreviations
+
+\newcommand{\setone}[2][1]{\set{#1\cld #2}}
+\newcommand{\eset}{\emptyset}
+%%\newcommand{\col}{\colon}
+\newcommand{\ol}[1]{\overline{#1}}                % overline
+\newcommand{\ul}[1]{\underline{#1}}               % underline
+\newcommand{\uls}[1]{\underline{\raisebox{0pt}[0pt][0.45ex]{}#1}}
+%% ul with space between text and line
+
+\newcommand{\ra}{\rightarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\La}{\Leftarrow}
+\newcommand{\lra}{\leftrightarrow}
+\newcommand{\Lra}{\Leftrightarrow}
+\newcommand{\lora}{\longrightarrow}
+\newcommand{\Lora}{\Longrightarrow}
+\newcommand{\lola}{\longleftarrow}
+\newcommand{\Lola}{\Longleftarrow}
+\newcommand{\lolra}{\longleftrightarrow}
+\newcommand{\Lolra}{\Longleftrightarrow}
+\newcommand{\ua}{\uparrow}
+\newcommand{\Ua}{\Uparrow}
+\newcommand{\da}{\downarrow}
+\newcommand{\Da}{\Downarrow}
+\newcommand{\uda}{\updownarrow}
+\newcommand{\Uda}{\Updownarrow}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Relations
+
+\newcommand{\incl}{\subseteq}
+\newcommand{\imp}{\rightarrow}
+\newcommand{\deq}{\doteq}
+\newcommand{\dleq}{\dot{\leq}}                   % dotted less equal
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Spaces
+
+\newcommand{\per}{\mbox{\bf .}}                  % period
+
+\newcommand{\cld}{,\ldots,}                      % ,...,
+\newcommand{\ld}[1]{#1 \ldots #1}                 % #1 ... #1
+\newcommand{\cd}[1]{#1 \cdots #1}                 % #1 ... #1
+\newcommand{\lds}[1]{\, #1 \; \ldots \; #1 \,}    % _#1_..._#1_
+\newcommand{\cds}[1]{\, #1 \; \cdots \; #1 \,}    % _#1_..._#1_
+
+\newcommand{\dd}[2]{#1_1,\ldots,#1_{#2}}             % x1,...,xn (da da)
+\newcommand{\ddd}[3]{#1_{#2_1},\ldots,#1_{#2_{#3}}}  % xi1,...,xin (da da down)
+\newcommand{\dddd}[3]{#1_{11}\cld #1_{1#3_{1}}\cld #1_{#21}\cld #1_{#2#3_{#2}}}
+%%                                x_11,...,x_1n,...,x_m1,...,x_mn_m
+
+\newcommand{\ldop}[3]{#1_1 \ld{#3} #1_{#2}}   % x1 #3...#3 xn
+\newcommand{\cdop}[3]{#1_1 \cd{#3} #1_{#2}}   % x1 #3...#3 xn
+\newcommand{\ldsop}[3]{#1_1 \lds{#3} #1_{#2}} % x1 _#3_..._#3_ xn
+\newcommand{\cdsop}[3]{#1_1 \cds{#3} #1_{#2}} % x1 _#3_..._#3_ xn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Delimiters
+
+\newcommand{\quotes}[1]{{\lq\lq #1\rq\rq}}
+\newcommand{\set}[1]{\{#1\}}                      % set
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\Bigl\{#1\Bigr\}}
+\newcommand{\bigmid}{\Big|}
+\newcommand{\card}[1]{|{#1}|}                     % cardinality of a set
+\newcommand{\Card}[1]{\left| #1\right|}
+\newcommand{\cards}[1]{\sharp #1}
+\newcommand{\sub}[1]{[#1]}
+\newcommand{\tup}[1]{\langle #1\rangle}            % tuple
+\newcommand{\Tup}[1]{\left\langle #1\right\rangle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Constraints
+
+%%\newcommand{\relc}[3]{#1#2#3}
+\newcommand{\inc}[2]{#1\colon #2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% DL specific commands
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Interpretation
+
+\newcommand{\inter}[1][\I]{(\dom[#1],\Int[#1]{\cdot})}   % (dom^I,.^I)
+
+\newcommand{\dom}[1][\I]{\Delta^{#1}}  % delta^I (domain of interpretation \I)
+\newcommand{\Int}[2][\I]{#2^{#1}}      % #2^I    (interpretation function)
+\newcommand{\INT}[2][\I]{(#2)^{#1}}    % (#2)^I  (interpretation function)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Basic Concept forming operators
+
+%\newcommand{\AND}{\sqcap}
+%\newcommand{\OR}{\sqcup}
+%\newcommand{\NOT}{\neg}
+%\newcommand{\ALL}[2]{\forall #1 \per #2}
+%\newcommand{\SOME}[2]{\exists #1 \per #2}
+%\newcommand{\SOMET}[1]{\exists #1}
+%\newcommand{\ALLRC}{\ALL{R}{C}}
+%\newcommand{\SOMERC}{\SOME{R}{C}}
+%\newcommand{\SOMERT}{\SOMET{R}}
+%\newcommand{\ATLEAST}[2]{(\geq #1 \, #2)}
+%\newcommand{\ATMOST}[2]{(\leq #1 \, #2)}
+%\newcommand{\EXACTLY}[2]{(= #1 \, #2)}
+%\newcommand{\INV}[1]{#1^{-}}

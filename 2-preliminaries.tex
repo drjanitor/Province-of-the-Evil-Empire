@@ -1,0 +1,218 @@
+\section{Preliminaries}\label{sec:preliminaries}
+
+We regard relations as sets of tuples of values accessible via given access patterns. Each value belongs to a domain; instead of concrete domains, such as \texttt{Integer} or \texttt{String}, we use \emph{abstract domains}, which represent information at a higher level of abstraction. With abstract domains one may distinguish, e.g., strings representing person names from strings representing conference venues. Abstract domains are disjoint, i.e. a single value cannot belong to more than one abstract domain.
+%% CHANGED: abstract domains are disjoint
+
+A \emph{relation schema} is a signature of the form $r^{\alpha_1\dots\alpha_n}(A_{1},\dots,A_{n})$, where $r$ is the relation name, $n$ is called the \emph{arity} of the relation, each $A_{i}$ is an abstract domain \footnote{Note that we use a positional notation for relations, and that the $A_i$'s do not denote attributes.}, and each $\alpha_i$ is an \emph{access mode}, which can be either an `$\inputmode$' or an `$\outputmode$' symbol.
+The sequence $\alpha_1\dots\alpha_n$ is called an \emph{access pattern} for $r$; for $1\leq k \leq n$, the $k$-th argument of $r$ is said to be an \emph{input} argument if $\alpha_k$ is `$\inputmode$', an \emph{output} argument otherwise.
+If the access pattern does not contain any `$\inputmode$', i.e., the relation only contains output arguments, then the relation is said to be \emph{free}.
+A \emph{database schema} (or, simply, schema) is a set of relation schemata for different relations.
+
+For convenience of notation, we sometimes indicate a sequence $s_{1},\dots,s_{n}$ as $\vec s$ and a tuple $\tup{c_{1},\dots,c_{m}}$ as $\tup{\vec c}$; the length of a sequence $\vec s$ is denoted by $|\vec s|$, and the $i$-th element $s_i$ as $\vec s[i]$.
+
+A \emph{relation} over a relation schema $r^{\vec\alpha}(\vec A)$ of arity $n$ is a set of tuples $\tup{\vec c}$ of $n$ elements such that, for each $i$ in $[1,n]$, $\vec c[i]$ belongs to abstract domain $\vec A[i]$. The input arguments indicated in the access pattern must be bound by a value in order to query the relation. For example, in relation $r$ with schema $r^{\outputmode\inputmode}(A_1,A_2)$, the first argument is an output argument of abstract domain $A_1$, while the second argument is an input argument of abstract domain $A_2$, and thus needs to be bound to a value in order for $r$ to be queried.
+
+A (\emph{database}) \emph{instance} of a schema $\R$ is a set of relations, one over each relation schema in $\R$.
+
+A \emph{conjunctive query} (CQ) (resp., \emph{conjunctive query with negation} (\CQnot)) $q$ of arity $n$ over a schema $\R$ is written in the form $$q(\vec x) ~\impl~ \conj(\vec x,\vec y)$$ where $|\vec x|=n$, $q(\vec x)$ is called the \emph{head} of $q$, $\conj(\vec x,\vec y)$ is called the \emph{body} of $q$ and is a conjunction of atoms (resp., atoms or negated atoms) involving the variables in $\vec x$ and $\vec y$ and possibly some constants, and the predicate symbols of the atoms are in $\R$. The set of constants occurring in $q$ is denoted $\constants(q)$. We assume that all queries are \emph{safe}, i.e., that each variable of the query appears in at least one non-negated atom in the body.
+
+Given a schema $\R$ and an instance $\I$ for $\R$, the \emph{answer} $q^\I$ to a CQ or \CQnot $\;q$ over $\R$ is the set of tuples $\tup{\vec c}$ of constants, with $|\vec c|=|\vec x|$, such that there is a sequence of constants $\vec d$, with $|\vec d|=|\vec y|$, for which each atom occurring non-negated in $\conj(\vec c,\vec d)$ holds in $\I$ and each atom occurring negated in $\conj(\vec c,\vec d)$ does not hold in $\I$.
+
+A \emph{union of conjunctive queries} (UCQ) (resp., \emph{union of conjunctive queries with negation}, \UCQnot) $q$ of arity $n$ over a schema $\R$ is a set $\{q_{1},\dots,q_{k}\}$ of CQ (resp., $\mbox{\CQnot}$) queries, each with head predicate $q$ and arity $n$; $q$ is safe if all of $\dd{q}{k}$ are. Given an instance $\I$ for $\R$, the answer $q^\I$ to $q$ over $\I$ is $\bigcup_i q_i^\I$.
+
+\subsection{Accesses and plans}\label{subsec:accesses-plans}
+
+In order to characterize our setting, we first need to define the notion of obtainable answer tuples, i.e., those tuples that can be extracted by some query plan that respects the access limitations on the sources.
+We formalize the process of data extraction with the notion of access, which is the smallest legal operation that can be performed on relations with access limitations.
+
+\begin{definition}[Access]\label{def:access}
+Let $r^{\vec\alpha}(\vec A)$ be a relation schema in a schema $\cal R$.
+An \emph{access} to $r$ is a CQ of the form $q(\vec x)\la r(\vec t)$
+such that $\vec x$ is a sequence of distinct variables each of which occurs exactly once in $\vec t$, and such that, for $1\leq j\leq n$,
+\begin{itemize}
+	\item if $\vec\alpha[j]=\inputmode$ then $\vec t[j]$ is a constant of domain $\vec A[j]$,
+	\item if $\vec\alpha[j]=\outputmode$ then $\vec t[j]$ is a variable in $\vec x$.
+\end{itemize}
+The constants in $\vec t$ are called \emph{input values}; the sub-tuple of $\vec t$ consisting of the input values of the access is called \emph{access tuple}, indicated $\accesstuple{\vec t}{r}$.
+The answer $\sigma^D$ to an access $\sigma$ in a database $D$ for $\R$ is called the \emph{extraction} made by the access $\sigma$ in $D$.
+\end{definition}
+
+A relation can be accessed either if it is free (i.e., it has no input arguments) or if some constants that can bind its input arguments are known. New constants extracted with an access may then be used to make further accesses.
+Note that, consistently with the literature, we assume that the strategy of enumerating all possible elements of a given abstract domain to access a relation is not feasible. This is so because, in many cases, the elements of an abstract domain may themselves not be known at query execution time. 
+Rather, we consider that the values for the input positions of a relation can only be obtained either from constants in the query or from tuples retrieved from other relations.
+Enumerable domains (e.g. years, countries) can be modeled by adding to the schema a free relation with a single attribute of the specific domain.
+% CHANGED: enumerable domains
+
+The sequences of accesses that are needed to retrieve data in order to answer a query are captured by the notion of access plan.
+
+\begin{definition}[Access plan]\label{def:access-plan}
+An \emph{access plan} for a schema $\R$, given a set $\C$ of constants, is a finite sequence of accesses for the relations in $\R$ such that the input values used in an access consist of constants either in $\C$ or coming from tuples in the extraction of previous accesses in the sequence.
+\end{definition}
+
+For each database instance, each query should then be associated with an access plan that extracts the query answer. This is precisely what a query plan does.
+
+\begin{definition}[Query plan]\label{def:query-plan}
+A \emph{query plan} $\Pi$ for an $n$-ary query $q(\vec x)\la \conj(\vec x,\vec y)$ over a schema $\R$, given a set $\C$ of constants including the constants in $q$, is a function that maps a database instance $D$ for $\R$ into a pair $\Pi(D)=(A,T)$, where
+\begin{itemize}
+    \item $A$ is an access plan A for $\R$ given $\C$,
+    \item $T$ is a set of $n$-ary tuples, called the \emph{obtained answer}, consisting of constants in the extractions of $A$ or in $\C$, and
+    \item if $\vec c\in T$, then there exists a tuple $\vec d$ with $|\vec d|=|\vec y|$ such that, for each atom $r(\vec t)$ occurring in $\conj(\vec c,\vec d)$,
+    \begin{enumerate}
+	    \item if $r(\vec t)$ occurs non-negated, then $r(\vec t)$ holds in $D$, and $A$ contains an access $\sigma$ to $r$ with access tuple $\accesstuple{\vec t}{r}$ such that $\vec t\in\sigma^D$;
+	    \item if $r(\vec t)$ occurs negated, then $r(\vec t)$ does not hold in $D$, and $A$ contains an access $\sigma$ to $r$ with access tuple $\accesstuple{\vec t}{r}$ such that $\vec t\not\in\sigma^D$.
+    \end{enumerate}
+\end{itemize}
+\end{definition}
+
+We are now able to characterize the maximally contained answer as the set of all tuples that can be extracted by query plans.
+
+\begin{definition}[Maximally contained answer]\label{def:maximal-answer}
+Given a schema $\R$, a query $q$, a set $\C$ of constants including the constants in $q$, and an instance $\I$ for $\R$, a tuple in $q^\I$ is $\C$-\emph{obtainable} in $\R$ if it is a tuple in the answer obtained for $\I$ by some query plan for $q$ over $\R$ given $\C$.
+The set of all tuples in $q^\I$ that are $\C$-obtainable in $\R$ is denoted $\ans(q,\R,\I,\C)$ and is called \emph{maximally contained answer}.
+\end{definition}
+
+By Definitions~\ref{def:query-plan} and~\ref{def:maximal-answer}, we immediately have $\ans(q,\R,\I,\C)\subseteq q^\I$. Note also that Definition~\ref{def:query-plan} gives an abstract characterization of query plans as arbitrary deterministic programs making accesses to relations; as such, it captures all possible query plans, including those that would decide which accesses to make based on any possible optimization techniques using, e.g., meta-data or knowledge about indexes on the data.
+
+\subsection{Retrieving all the obtainable answers}
+\label{subsec:nonoptimized-algo}
+
+In~\cite{LiCh00} an algorithm is presented that, given a query over the relations, retrieves the maximally contained answer to the query. Such an algorithm, informally described in Figure~\ref{fig:algo-naive}, consists in the evaluation of a suitable Datalog program that extracts all obtainable tuples starting from a set of initially known constants. The Datalog program is constructed by encoding in Datalog clauses the limitations on the relations that must be respected during query evaluation. The evaluation of the Datalog program makes use of a set storing the constants extracted from the relations (together with the constants appearing in the query), and of a \emph{cache} that stores a partial copy of the relations, populated with the tuples extracted from the relations. The algorithm extracts all tuples obtainable while respecting the access patterns, performing a finite number of iterations of Step~2.
+
+Observe that there may be tuples in the relations that cannot be retrieved.
+We illustrate the extraction strategy in the following example.
+
+% CHANGED: algorithm
+\begin{figure}\label{fig:algo-naive}
+\rule{\textwidth}{0.075mm}
+\begin{algorithmic}
+\Function{NaiveAlgorithm}{$\R, q, \C$}
+    \Let $\C \setq \C \cup \constants(q)$
+    \ForAll{$r \in \R$}
+        \Let $P_r \setq \emptyset$
+    \EndFor
+    \Let $\hat \I \setq$ empty instance for $\R$ (``cache'')
+    \Repeat
+        \Let $\var{fixpoint} \setq \top$
+        \ForAll{$r \in \R,
+                \tup{\vec a} \in \Call{Patterns}{\C, r} \setminus P_r$}
+            \Let $A \setq \Call{Access}{r, \tup{\vec a}}$
+            \Let $P_r \setq P_r \cup \{ \tup{\vec a} \}$
+            \Let $r^{\hat \I} \setq r^{\hat \I} \cup A$
+            \If {$\constants(A) \nsubseteq \C$}
+                \Let $\var{fixpoint} \setq \bot$
+                \Let $\C \setq \C \cup \constants(A)$
+            \EndIf
+        \EndFor
+    \Until{\var{fixpoint}}
+    \State \textbf{return} $q^{\hat \I}$
+\EndFunction
+
+\\
+
+\Function{Patterns}{$r,\C$}
+    \Let $\dd{A}{n} \setq $ abstract domains of the input arguments of $r$
+    \For{$i \setq 1$ to $n$}
+        \Let $\C_i \setq \{ a \in \C : a \textrm{ is of abstract domain } A_i \}$
+    \EndFor
+    \State \textbf{return} $\C_1 \times \cdots \times \C_n$
+\EndFunction
+
+\end{algorithmic}
+\rule{\textwidth}{0.075mm}
+\caption{Naive algorithm for evaluating the maximally contained answer}
+\end{figure}
+
+% \begin{figure}[t]\label{fig:algo-naive}
+%     \framebox{\begin{minipage}[b]{\textwidth}
+%         \noindent\textbf{Naive algorithm}
+%         \begin{enumerate}
+%             \item Initialize $\C$ with the set of constants in the query; 
+%                   empty the cache
+%             \item \textbf{while} accesses with new constants are possible
+%             \begin{enumerate}
+%                 \item Access as many relations as possible, according to 
+%                       their access patterns, using only constants in $\C$
+%                 \item Put the obtained tuples in the cache
+%                 \item Put the obtained constants in $\C$
+%             \end{enumerate}
+%             \item Evaluate the query over the cache
+%         \end{enumerate}
+%     \end{minipage}}
+%     \caption{Naive algorithm for evaluating the maximally contained answer}
+% \end{figure}
+
+\begin{figure}[t]\label{fig:exten}
+    \[
+        r_1:
+        \begin{array}{|c|c|}
+            \hline
+            a_1 & c_1 \\ \hline
+            a_1 & c_3 \\ \hline
+            a_3 & c_3 \\ \hline
+        \end{array}
+        \hspace*{8mm}
+        r_2:
+        \begin{array}{|c|c|}
+            \hline
+            c_1 & b_1 \\ \hline
+            c_2 & b_2 \\ \hline
+            c_3 & b_3 \\ \hline
+        \end{array}
+        \hspace*{8mm}
+        r_3:
+        \begin{array}{|c|c|}
+            \hline
+            b_2 & c_1 \\ \hline
+            b_1 & c_2 \\ \hline
+        \end{array}
+    \]
+    \caption{Extension of relations of Example~\ref{ex:prog}}
+\end{figure}
+
+\begin{example}\label{ex:prog}
+Consider the following schema
+\[
+    \R = \{ r_1^{\inputmode\outputmode}(\attr{A},\attr{C}),
+            r_2^{\outputmode\inputmode}(\attr{C},\attr{B}),
+            r_3^{\outputmode\inputmode}(\attr{B},\attr{C}) \}
+\]
+Suppose we have the following conjunctive query over $\R$:
+\[
+    q(B) \la r_1(\const{a}_1,C), r_2(C,B).
+\]
+Now, assume a database in which the relations have the extension shown in
+Figure~\ref{fig:exten}.
+
+Suppose we only know the constants in the query. Starting from $\const{a}_1$, the only known constant, we access $r_1$ getting the tuples $\tup{\const{a}_1,\const{c}_1}$ and $\tup{\const{a}_1,\const{c}_3}$, whereas $\tup{\const{c}_1,\const{b}_1}$
+in $r_{2}$ is not (yet) accessible because of the access patterns.
+But now we have $\const{c}_1$, with which we can access $r_3$ and retrieve
+$\tup{\const{b}_2,\const{c}_1}$. With $\const{b}_2$ we extract
+$\tup{\const{c}_2,\const{b}_2}$ from $r_2$; then, with $\const{c}_2$ we
+retrieve $\tup{\const{b}_1,\const{c}_2}$ from $r_{3}$.
+Finally with $\const{b}_1$ we extract $\tup{\const{c}_1,\const{b}_1}$ from $r_{2}$ and obtain $\tup{\const{b}_1}$ as the answer to $q$. 
+
+Observe that $\tup{\const{a}_3,\const{c}_3}$ and $\tup{\const{c}_3,\const{b}_3}$ could not be extracted from $r_1$ and $r_2$, respectively, and, therefore, that answer $\tup{\const{b}_3}$ is not obtainable.
+\end{example}
+
+Access limitations may make it impossible to ever obtain an answer for a query, independently of the database instance; in such a case we say that the query is unanswerable, as specified below.
+\begin{definition}\label{def:answerable}
+	Let $\R$ be a schema, $q$ a query over $\R$, and $\C$ a set of constants.
+	The query $q$ is $\C$-\emph{answerable} in $\R$ if there exists an instance $\I$ for $\R$ such that $\ans(q,\R,\I,\C)\neq \emptyset$; otherwise, $q$ is said to be $\C$-\emph{unanswerable} in $\R$.
+\end{definition}
+
+% CHANGED: definizioni
+
+In the extreme case, it might be impossible to extract a single tuple for a relation; we will therefore define the analogous concept of accessibility as follows.
+\begin{definition}\label{def:accessible}
+    Let $\R$ be a schema, $r$ a relation in $\R$ and $\C$ a set of constants.
+    The relation $r$ is $\C$-\emph{accessible} if the query $q(\vec x) \la r(\vec x)$ is $\C$-answerable; otherwise, $r$ is said to be $\C$-\emph{inaccessible}.
+\end{definition}
+
+\begin{proposition}\label{pro:answerable-if-accessible}
+    Let $\R$ be a schema, $q$ a query over $\R$, and $\C$ a set of constants.
+    The query $q$ is $\C$-answerable if and only if every relation appearing in its body is accessible.
+\end{proposition}
+
+\begin{example}[\ref{ex:prog} cont'd]\label{ex:answerability}
+	The query of Example~\ref{ex:prog} is is $\constants(q)$-answerable, since we have exhibited a database instance and a sequence of accesses that extracts a non-empty answer from it. Conversely, a query such as $q_1(A)\la r_1(A,C)$ over $\R$ is not is $\constants(q_1)$-answerable, because there is no constant, known from $q_1$ or extractible from other relations in $\R$, of abstract domain $A$ that can be used to access $r_1$.
+\end{example}

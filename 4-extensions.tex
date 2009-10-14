@@ -1,0 +1,198 @@
+\section{Extensions to more expressive query languages}\label{sec:extensions}
+
+\subsection{Unions of conjunctive queries}
+In this section, we address the problem of finding a query plan for a UCQ.
+Our approach is to transform a UCQ into an appropriate CQ to which the technique presented can be applied.
+The obtained CQ can then be used to determine the relevant relations for the original UCQ.
+We assume in the following, w.l.o.g., that the initial UCQ is constant-free, since any query containing constants can be transformed by  algorithm \ref{fig:algo-constants} into an equivalent query without constants.
+
+Let $q$ be a constant-free UCQ over a schema $\R$: % defined as follows:
+%
+$$
+\{\;  q(\vec x_{1}) \impl
+\conj_{1}(\vec x_1,\vec y_1),\;
+  \ldots,
+  \;q(\vec x_m) \impl
+\conj_{m}(\vec x_m,\vec y_m) \;\}
+$$
+
+
+% \[
+%   \begin{array}{rrll}
+%     \{&  q(\vec x_{1}) ~\impl~
+%     &\conj_{1}(\vec x_1,\vec y_1),\\
+%     &  \vdots&\\
+%     &  q(\vec x_m) ~\impl~
+%     &\conj_{m}(\vec x_m,\vec y_m) &\}\\
+%   \end{array}
+% \]
+% 
+We first replace each rule in $q$ with a variant thereof, so that in the end all
+rules are standardized apart, as follows
+%
+$$
+    \{\;  q(\vec x'_{1}) \impl
+    \conj_{1}(\vec x'_1,\vec y'_1),
+    \;  \ldots,\;
+      q(\vec x'_m) \impl
+    \conj_{m}(\vec x'_m,\vec y'_m) \;\}
+$$
+% \[
+%   \begin{array}{rrll}
+%     \{&  q(\vec x'_{1}) ~\impl~
+%     &\conj_{1}(\vec x'_1,\vec y'_1),\\
+%     &  \vdots&\\
+%     &  q(\vec x'_m) ~\impl~
+%     &\conj_{m}(\vec x'_m,\vec y'_m) &\}\\
+%   \end{array}
+% \]
+where each primed variable is a fresh new variable. Clearly, the expression
+above is equivalent to the original UCQ.
+
+We then generate the following CQ:
+$$
+    q'(\vec x'_{1},\ldots,\vec x'_m) \impl
+    \conj_{1}(\vec x'_1,\vec y'_1),
+    \ldots,
+    \conj_{m}(\vec x'_m,\vec y'_m)
+$$
+% \[
+%   \begin{array}{rl}
+%     q'(\vec x'_{1},\ldots,\vec x'_m) ~\impl~
+%     \conj_{1}(\vec x'_1,\vec y'_1),
+%     \ldots,
+%     \conj_{m}(\vec x'_m,\vec y'_m)\\
+%   \end{array}
+% \]
+
+Now we apply to $q'$ the same technique we have shown for CQs.
+We obtain as output a Datalog program $\Pi$
+whose first clause redefines $q'$ and has the following form:
+%
+\[
+    \{q'(\vec x'_{1},\ldots,\vec x'_m) ~\impl~
+    \retr{\conj}_{1}(\vec x'_1,\vec y'_1),
+    \ldots,
+    \retr{\conj}_{m}(\vec x'_m,\vec y'_m)\} \cup \Pi'
+\]
+where the various ${\retr{conj}_{i}}$'s are as the ${conj_{i}}$'s, but refer to
+the cache relations instead, which are defined in the remainder of $\Pi$, which
+we denote as $\Pi'$.
+
+The above $m$ rules together with $\Pi'$ constitute a Datalog program
+corresponding to an optimized query plan that computes all the answers to the
+original UCQ $q$ that are obtainable from the relations in $\R$.
+
+Finally, from the rewritten query $q'$, we generate the following $m$ rules.
+%
+$$
+    \{\;  q'(\vec x'_{1}) \impl
+    \retr{\conj}_{1}(\vec x'_1,\vec y'_1),
+      \;\ldots,\;
+      q'(\vec x'_m) \impl
+    \retr{\conj}_{m}(\vec x'_m,\vec y'_m) \;\}
+$$
+% \[
+%   \begin{array}{rrll}
+%     \{&  q'(\vec x'_{1}) ~\impl~
+%     &\retr{\conj}_{1}(\vec x'_1,\vec y'_1),\\
+%     &  \vdots&\\
+%     &  q'(\vec x'_m) ~\impl~
+%     &\retr{\conj}_{m}(\vec x'_m,\vec y'_m) &\}\\
+%   \end{array}
+% \]
+% TODO: adjust the conclusion of this.
+The above $m$ rules together with $\Pi'$ constitute a Datalog program whose execution with the fast-failing strategy (with minor adjustments for UCQs) implements a 
+%$\submin$-
+minimal query plan for $q$.
+Relevance can be easily decided for all predicates in $\R$ from the optimized d-graph of $q'$ in the same way as was done for CQs. 
+% TODO: show how + theorem
+
+
+\subsection{Adding safe negation}\label{sec:negation}
+
+We now consider the class of \CQnot \ queries and show how to check relevance of relations.
+Whenever $q$ is a \CQnot \ query, we indicate by $q^{+}$ (resp., $q^{-}$) the query whose head is the same as $q$'s and whose body is the conjunction of the negative (resp., positive) literals in $q$.
+%
+Clearly, if $q$ is unsatisfiable no relation is relevant;
+else, any relation occurring in $q$ is necessarily relevant. A relation not occurring in $q$ is relevant if and only if it occurs in the optimized d-graph of $q^+$, which is a CQ. Indeed, safeness of negation implies that all variables occurring in a negative literal also occur in a positive one. In other words, a negative occurrence of a literal only needs those values that come from the positive literals in the body, which are considered in the optimized d-graph of $q^+$.
+%
+\begin{theorem}\label{the:dgraph-relevant-cqnot}
+  Let $q$ be a \CQnot \ query over a schema $\R$ and let $G$ be the optimized d-graph for $q^+$.
+  A relation $r\in\R$ is relevant iff $q$ is satisfiable, and
+  \myi $r$ occurs in $q^{-}$, or
+  \myii $r$ occurs in $G$, or
+  \myiii $r$ is nullary and occurs in $q$.
+\end{theorem}
+%
+Note that unsatisfiability for \CQnot \ queries can be checked in PTIME~\cite{LuNa04a} and the optimized d-graph of a CQ is also computed in PTIME;
+this easily extends to \UCQnot \ queries.
+%
+\begin{corollary}
+Relevance for \UCQnot \ queries is decidable in PTIME.
+\end{corollary}
+%
+A %$\submin$-
+minimal query plan for \UCQnot \ queries can be obtained similarly to what was done for UCQs.
+%
+We observe that a %$\submin$-
+minimal execution strategy for a \CQnot query $q$ consists in: (i) executing the optimized query plan for $q^+$; (ii) filtering out the result set by calling the atoms in $q^-$ only with the bindings obtained from $q^+$, and never twice with the same bindings.
+%
+An alternative %$\submin$-
+minimal execution strategy would consist in executing those parts of $q^+$ which can provide useful bindings for the atoms in $q^-$, and executing such atoms as soon as possible, possibly before other atoms in $q^+$.
+%
+Statistical information on the sources might suggest which strategy is more suitable, although neither will prevail on all instances.
+
+\subsection{Datalog queries}\label{sec:datalog}
+
+We have shown in the previous sections that it is possible to determine whether a given relation is relevant for a given query expressed as a \UCQnot.
+We now prove that this is not the case for Datalog queries, since, if we were able to decide relevance of a relation, we could also decide containment between Datalog queries, which is known to be undecidable.
+This solves negatively the issue opened in \cite{LiCh01b}.
+% in 2001.
+
+\begin{theorem}\label{the:relevant-datalog-undecidable}
+There cannot be an algorithm that determines whether a relation is relevant for a Datalog query.
+\end{theorem}
+\begin{proof}(Sketch)
+Let $\Pi$ be a Datalog program over a schema $\R$, without access limitations, defining two arbitrary predicates $p$ and $q$.
+Let $e$ be an extensional predicate not occurring in $\Pi$ and $i$ a new intensional predicate defined by the rules 
+$i(\vec x)\la e, p(\vec x)$, and $i(\vec x)\la q(\vec x)$.
+%
+If we could establish whether $e$ is relevant to answer the Datalog query
+%
+$Ans(\vec x) \la i(\vec x)$
+%
+then we could also decide containment between $p$ and $q$, which is absurd (and \emph{a fortiori} absurd for a schema that can have access limitations).
+More precisely, $q$ contains $p$ iff $e$ is not relevant, i.e.:
+\begin{enumerate}
+\item[(1)] If $q$ contains $p$, then $e$ is not relevant.
+\item[(2)] If $q$ does not contain $p$, then $e$ is relevant.
+\end{enumerate}
+
+To see that (1) holds, it suffices to observe that $r_1$ cannot contribute any tuple to $i$ that is not already contributed by $r_2$, and thus $e$ need not be accessed.
+
+To see that (2) holds, consider a database $D$ in which $p(\vec c)$ holds but $q(\vec c)$ does not hold, for some constants $\vec c$. Such a database must exist, as $p$ is not contained in $q$.
+Since $p$ and $q$ are independent of $e$, their containment is also independent of $e$, so $e$ may either hold or not hold in $D$. If $e$ holds in $D$, then $\vec c$ is in the answer; if $e$ does not hold in $D$, then $\vec c$ is not in the answer. Therefore $e$ is relevant, since it changes the obtainable answers for the query.
+%\markempty
+\end{proof}
+
+% \begin{figure} 
+%  \centering 
+% \begin{tabular}{|r|c|c|c|c|c|}
+% \hline
+% &CQ&UCQ&\CQnot&\UCQnot&Datalog\\
+% \hline
+% Relevance&PTIME&PTIME&PTIME&PTIME&undecidable\\
+% \hline
+% $\exists$-Minimality&PTIME&PTIME&PTIME&PTIME&impossible?\\
+% \hline
+% $\forall$-Minimality&?&?&?&?&impossible?\\
+% \hline
+% $*$-Minimality&?&?&?&?&impossible?\\
+% \hline
+% Containment&$\in$coNEXPTIME&?&?&?&undecidable\\
+% \hline
+% \end{tabular}
+%  \caption{Relevance, minimality, and containment}
+%  \label{tab:relevance-minimality-containment} 
+% \end{figure}

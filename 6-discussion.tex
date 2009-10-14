@@ -1,0 +1,57 @@
+\section{Discussion}\label{sec:discussion}
+
+We have presented a novel technique to determine the relevant relations to a query formulated over relations with access limitations.
+Based on the binding patterns of a query, we construct a d-graph that indicates all possible ways in which input arguments in a relation can receive useful values from output arguments with the same
+domain. The d-graph is optimized according to the joins included in
+the query and then used to generate a Datalog program that answers the
+query. The technique works for CQs as well as UCQs.
+
+\subsection{Conclusion from sigmod}
+\label{sec:conclusion}
+
+In this paper, we have presented a technique to determine sources that are
+relevant to a certain query, expressed as a union of CQs with negation, under
+access limitations; this solves a quite long-standing open problem, that was
+left open for even positive CQs.  Deciding relevance can be done in deterministic
+polynomial time.  Also, we have shown that thes same problem is undecidable for
+Datalog queries.
+
+We have started from a graph-based approach to represent how values extracted
+from one source can serve to access another source; by suitably pruning this
+graph, we are able to determine which sources are relevant.  Furthermore, we
+have presented an algorithm to generate a query plan from the pruned graph;
+such algorithm, evaluated according to a specific execution strategy, ensures
+minimality of the number of accesses to sources, while returning all obtainable
+answers.
+% TODO: scrivere qualcosa su ICDE 2008
+%  This is described in~\cite{CaMaICDE2008}, where the implementation of
+% our system \system{} is presented.
+
+Although further optimizations may be obtained that consider statistical
+information on the sources (e.g., their expected response times), our
+minimization is a necessary layer for efficient query answering, since all
+accesses that are unnecessary for every instance are to be excluded anyway.
+
+Finally, we have given experimental evidence of the effectiveness of our
+technique to reduce the number of accesses.
+
+Directions of future investigation that may have an immediate impact on query
+optimization in this context include algorithms for efficiently checking query
+containment under access limitations; known algorithms for query containment
+that achieve the lowest computational complexity are now non-deterministic, and
+it is not obvious how to derive from them practical algorithms, possibly
+employing run-time optimization techniques.  Also, we plan to consider the
+optimization of query answering where we have integrity constraints on top of
+the access limitations.
+
+% FIXME: qui o nelle conclusioni o dove?
+% ANDREA: secondo me, meglio nelle conclusioni
+We also observe that the techniques described in this paper continue to apply
+even if additional information about useful binding values is known.  For
+instance, to include data cached from previous query evaluations, it suffices
+to include such caches in the source schema.  If, by domain knowledge or
+statistical information, it is known that the sensible bindings for a given
+domain are all within a given range or set, such set can, again, be modeled as
+a free source; then, in the d-graph, it suffices to mark all its outgoing arcs
+as candidate strong.
+

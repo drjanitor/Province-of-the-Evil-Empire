@@ -1,0 +1,103 @@
+% VERSIONE SIGMOD 2008
+\section{Related Work}
+\label{sec:related}
+
+Processing queries under access limitations is an important issue in database
+theory and information systems.  Several works in the literature have
+investigated this problem~\cite{RaSU95,DuLe97,FLMS99,MiLF00,LiCh00,LiCh01,LiCh01b,Li03,DBLP:journals/jcss/MillsteinHF03,NaLu04,LuNa04a,YaKC06,Srivastava:2006fk,Deutsch:2007lr}. In particular: \cite{FLMS99}
+considers non-recursive plans and their optimization; \cite{RaSU95} addresses
+the problem of determining whether a conjunctive query can be answered in the
+presence of access limitations, showing that it can be decided in polynomial
+time; finally, \cite{DuLe97} presents algorithms for query answering using
+views under access limitations;
+%
+\cite{MiLF00,LiCh00} introduced recursive query
+plans; \cite{MiLF00} addresses the problem of query containment
+under access limitations.
+
+% Since accessing data sources is costly, especially in the case of Web data, a
+% fundamental issue is how to reduce the \emph{number} of accesses to the
+% sources while still returning all obtainable answers to a query.
+
+A few works address the problem of optimizations that can be made at the time
+of the generation of the query plan~\cite{LiCh00,LiCh01,LiCh01b}.  All of these
+works consider a narrow class of queries that they call \emph{connection
+  queries}; such a class is a proper subclass of the class of UCQs, that does
+not include CQs.  We do believe that connection queries are of little
+significance w.r.t.~queries used in practice: indeed, in a connection query,
+there has to be a join among all attributes that share the same abstract
+domain; moreover, all such attributes have to be either all selected or all
+non-selected.  If we consider a binary relation $\mathit{supervises}$ with both
+attributes belonging to the abstract domain $\mathit{Employee}$, the
+insufficient expressiveness of connection queries is evident: with such
+queries, we can \emph{only} ask for those employees who are supervisors of
+themselves (or, with a ground query, whether a given employee is supervisor of
+him/herself); we cannot, for example, ask who is the supervisor of a certain
+employee.  In our experimentations, we chose not to compare our optimizations
+with those of~\cite{LiCh01b}, since most of the queries we dealt with are not
+connection queries; notice that in case of connection queries we are able to
+determine the relevant sources as in~\cite{LiCh01b}, and we are also able to
+perform further optimizations w.r.t.~ the accesses.  Notice that
+in~\cite{LiCh01b} it is conjectured that the technique used for connection
+queries can be used, with slight variations, to determine relevance for CQs;
+however, being the structure of connection queries much simpler than that of
+CQs, it is evident that it is not possible to use the same optimization
+technique also for CQs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% ALTRI PROBLEMI %%%
+Another issue in this framework is \emph{stability}, i.e., determining whether
+the \emph{complete} answer to a query (the one that would be obtained with no
+access limitations) can always be computed despite the access limitations; this
+is addressed in~\cite{Li03}.
+%
+Checking the \emph{feasibility} of a query amounts to determining whether there
+exists an equivalent query that is executable as is from left to right, while
+respecting the access limitations.  This is studied
+in~\cite{NaLu04,LuNa04a,YaKC06}.
+% In particular, it is studied whether there is an ordering of subgoals that
+% enables answering the query, and, if multiple such orderings are possible,
+% how to pick the best ordering.
+%
+\cite{Deutsch:2007lr} addresses the (quite general) problem of query answering using
+views~\cite{Hale01} under integrity constraints and under access limitations,
+showing that access limitations can be encoded into integrity constraints of
+suitable form, that can be treated together with the other constraints.  This
+work, however, does not considers the optimization problem.
+
+In \cite{Srivastava:2006fk}, the authors propose a framework for querying
+multiple Web services. They describe an algorithm, based on statistical
+information about Web services, for arranging a query's service invocations
+into a pipelined execution plan that exploits parallelism among Web services so
+as to minimize the query's total running time.  Their approach refers to a
+context in which the queries to be handled are supposed to be always
+feasible. In particular, cyclic input/output dependencies, such as those of
+Example~\ref{exa:limitations} among $r_1$, $r_2$, and $r_3$, are not allowed;
+in their simpler setting, query plans for CQs need no recursive evaluation.
+However, in the general case, query plans may need a recursive evaluation even
+when the query is conjunctive.
+%
+When values are available from multiple web services, it may be important to
+decide which service is of higher quality.  This choice needs to be guided by
+statistical considerations; profiling techniques enabling efficient query
+processing in this context are described in \cite{SrivastavaPhDThesis}.
+However, this issue is orthogonal to the notion of relevance studied in this
+paper: irrelevant sources are those that are certainly not useful to answer a
+query and can be ruled out independently of statistical information.
+
+% TODO: aggiungere qualcosa riguardo ICDE 2008
+% questo e' ICDE-08
+% In~\cite{CaMaICDE2008}, where we first introduced the graph model and the algorithm
+% for the generation of minimal query plans, we describe the system \system:
+% \system{} deals with positive conjunctive queries only, and implements suitable
+% heuristics to query sources in parallel as much as possible, thus reducing the
+% overall query answering time.
+% Notice also that \system{} accesses only relevant sources.
+
+Access limitations have also been studied in the context of logic programs with
+(input or output) \emph{modes}; in particular, the notion of
+\emph{well-modedness}, due to \cite{DBLP:conf/slp/DembinskiM85}, corresponds to
+the notion of executability of a query from left to right of the previously
+mentioned works.
